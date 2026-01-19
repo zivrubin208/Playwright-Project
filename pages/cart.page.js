@@ -6,10 +6,12 @@ export class CartPage {
   }
 
   async getItemsCount() {
-    return (await this.page.$$(this.cartItems)).length;
+    const items = this.page.locator(this.cartItems);
+    const count = await items.count();
+    return count;
   }
 
   async proceedToCheckout() {
-    await this.page.click(this.checkoutButton);
+    await this.page.locator(this.checkoutButton).click();
   }
 }

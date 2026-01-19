@@ -1,9 +1,14 @@
-import { expect } from '@playwright/test';
+const { expect } = require('@playwright/test');
 
-export async function expectUrl(page, url) {
+async function expectUrl(page, url) {
   await expect(page).toHaveURL(url);
 }
 
-export async function expectTitle(page, text) {
-  await expect(page.locator('.title')).toHaveText(text);
+async function expectElementText(locator, expectedText) {
+  await expect(locator).toHaveText(expectedText);
 }
+
+module.exports = {
+  expectUrl,
+  expectElementText
+};

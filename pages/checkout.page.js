@@ -9,18 +9,28 @@ export class CheckoutPage {
     this.thankYouHeader = '.complete-header';
   }
 
-  async fillInfo(firstName, lastName, postalCode) {
-    await this.page.fill(this.firstNameInput, firstName);
-    await this.page.fill(this.lastNameInput, lastName);
-    await this.page.fill(this.postalCodeInput, postalCode);
-    await this.page.click(this.continueButton);
+  async fillFirstName(firstName) {
+    await this.page.locator(this.firstNameInput).fill(firstName);
   }
 
-  async finishCheckout() {
-    await this.page.click(this.finishButton);
+  async fillLastName(lastName) {
+    await this.page.locator(this.lastNameInput).fill(lastName);
   }
 
-  async getThankYouText() {
-    return await this.page.textContent(this.thankYouHeader);
+  async fillPostalCode(postalCode) {
+    await this.page.locator(this.postalCodeInput).fill(postalCode);
+  }
+
+  async clickContinue() {
+    await this.page.locator(this.continueButton).click();
+  }
+
+  async clickFinish() {
+    await this.page.locator(this.finishButton).click();
+  }
+
+  async getThankYouMessage() {
+ 
+    return await this.page.locator(this.thankYouHeader).textContent();
   }
 }
