@@ -5,6 +5,7 @@ import { LoginPage } from '../pages/login.page';
 Object.entries(INVALID).forEach(([key, scenario]) => {
   test(`Negative login – ${key}`, async ({ page }) => {
     const login = new LoginPage(page);
+
     await login.goto();
     await login.login(scenario.username, scenario.password);
 

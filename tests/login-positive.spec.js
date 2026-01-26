@@ -2,15 +2,25 @@ import { test, expect } from '@playwright/test';
 import { BASE_URL, USERS } from '../data/users.data';
 import { LoginPage } from '../pages/login.page';
 
-test('Positive login – standard user', async ({ page }) => {
-  const login = new LoginPage(page);
+const POSITIVE_USERS = [
+  'standard_user',
+  'problem_user',
+  'performance_glitch_user',
+  'error_user',
+  'visual_user',
+];
 
-  await login.goto();
-  await login.login(
-    USERS.standard_user.username,
-    USERS.standard_user.password
-  );
+POSITIVE_USERS.forEach((userKey) => {
+  test(`Positive login – ${userKey}`, async ({ page }) => {
+    const login = new LoginPage(page);
 
-  await expect(page).toHaveURL(`${BASE_URL}inventory.html`);
-  await expect(page.locator('.title')).toHaveText('Products');
+    await login.goto();
+    await login.login(
+      USERS[userKey].username,
+      USERS[userKey].password
+    );
+
+    await expect(page).toHaveURL(`${BASE_URL}inventory.html`);
+    await expect(page.locator('.title')).toHaveText('Products');
+  });
 });
