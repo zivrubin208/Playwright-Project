@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { INVALID } from '../data/users.data';
+import { BASE_URL, INVALID } from '../data/users.data';
 import { LoginPage } from '../pages/login.page';
 
 Object.entries(INVALID).forEach(([key, scenario]) => {
@@ -7,10 +7,14 @@ Object.entries(INVALID).forEach(([key, scenario]) => {
     const login = new LoginPage(page);
 
     await login.goto();
+
     await login.login(scenario.username, scenario.password);
 
-    const errorLocator = page.locator('[data-test="error"]');
-    await expect(errorLocator).toBeVisible();
-    await expect(errorLocator).toContainText(scenario.error);
+    await expect(page).toHaveURL(BASE_URL);
+    await expect(page.locator('.login_logo')).toHaveText('Swag Labs');
+
+    const errorMessage = page.locator('[data-test="error"]');
+    await expect(errorMessage).toBeVisible();
+    await expect(errorMessage).toContainText(scenario.error);
   });
 });

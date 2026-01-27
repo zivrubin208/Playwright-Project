@@ -22,14 +22,16 @@ test('SANITY – full purchase flow', async ({ page }) => {
   await expectElementText(page.locator('.title'), 'Products');
 
   await inventory.addItemsToCart(2);
-  await expectElementText(page.locator('.shopping_cart_badge'), '2');
+
+  await expect(page.locator('.shopping_cart_badge')).toHaveText('2');
+
   await inventory.goToCart();
 
   await expectUrl(page, `${BASE_URL}cart.html`);
   await expectElementText(page.locator('.title'), 'Your Cart');
 
-  const cartCount = await cart.getItemsCount();
-  expect(cartCount).toBe(2);
+  await expect(page.locator('.cart_item')).toHaveCount(2);
+
   await cart.proceedToCheckout();
 
   await expectUrl(page, `${BASE_URL}checkout-step-one.html`);
@@ -44,12 +46,21 @@ test('SANITY – full purchase flow', async ({ page }) => {
   await checkout.clickContinue();
 
   await expectUrl(page, `${BASE_URL}checkout-step-two.html`);
-  await expectElementText(page.locator('.title'), 'Checkout: Overview');
+  await expectElementText(
+    page.locator('.title'),
+    'Checkout: Overview'
+  );
+
   await checkout.clickFinish();
 
   await expectUrl(page, `${BASE_URL}checkout-complete.html`);
-  await expectElementText(page.locator('.title'), 'Checkout: Complete!');
+  await expectElementText(
+    page.locator('.title'),
+    'Checkout: Complete!'
+  );
 
-  const thankYou = await checkout.getThankYouMessage();
-  expect(thankYou).toContain('Thank you for your order!');
+  const thankYouMessage = page.locator('.complete-header');
+  await expect(thankYouMessage).toContainText(
+    'Thank you for your order!'
+  );
 });
